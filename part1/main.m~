@@ -1,0 +1,21 @@
+%% Specify paramters
+r = 0.01;           %ratio of images to load
+method = 'sift';    %feature extraction method
+k = 400;            %number of words in visual vocabulary
+
+%% Load images
+[train_cell, test_cell] = load_data(r);
+
+%% Extract SIFT features from images
+train_feature_cell = feature_extraction(train_cell, method);
+
+%% Build visual vocabulary
+C = build_vocab(train_feature_cell,k);
+
+%% Represent images using visual vocabulary
+% TODO "Take images from the training set of the
+% related class (but the ones which you did not use for dictionary calculation)"
+train_hist_cell = sift2hist(train_feature_cell,C);
+
+%% Use SVM to classify images
+model = train(training_label_vector, training_instance_matrix [,'liblinear_options', 'col']);

@@ -1,0 +1,27 @@
+%% Return a cell with variable number of SIFT features for each image (takes RGB)
+function [images_features_cell] = feature_extraction(train_cell, method)
+disp('Extracting features...');
+
+% Obtain SIFT features for every image in cell and place in new cell
+train_feature_cell = cell(1,length(train_cell));
+
+% Loop over data sets
+for i = 1:length(train_cell)
+    dataset_features_cell = train_cell{i};
+    
+    % Get number of images in data set and create new cell
+    n = length(dataset_features_cell);
+    images_features_cell = cell(1,n);
+    % Loop over images
+    for j=1:n
+        % Extract features
+        if method == 'sift'
+            [f, d] = vl_sift(single(rgb2gray(images_features_cell{j})));
+        elseif method == 'dsift'
+            [f, d] = vl_dsift(single(rgb2gray(images_features_cell{j})));
+        end
+        dataset_features_cell{j} = d;
+    end
+    train_feature_cell{i} = dataset_features_cell;
+end
+end
