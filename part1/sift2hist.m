@@ -10,10 +10,10 @@ for i = 1:length(train_feature_cell)
         im_features = double(dataset_feature_cell{j});
         % Compute the distances between the vocabulary words and the
         % visual words in the image
-        [~,hist] = min(pdist2(im_features',C)');
+        [~,hist] = min(pdist2(im_features',C));
         
         % Normalize the histogram
-        dataset_hist_cell{j} = hist./size(im_features,2)
+        dataset_hist_cell{j} = hist./size(im_features,2);
     end
     train_hist_cell{i} = dataset_hist_cell;
 end
