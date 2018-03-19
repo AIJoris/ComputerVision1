@@ -1,5 +1,5 @@
 %% Loads train images and test images for all classes in cells.
-function [trainset, testset] = load_data(n)
+function [trainset1, trainset2, testset] = load_data(n,r)
 disp('Loading Images...');
 
 % Delete non-color images
@@ -20,7 +20,9 @@ faces_train = load_dir('../Caltech4/ImageData/faces_train/', n);
 motorbikes_test = load_dir('../Caltech4/ImageData/motorbikes_test/', n);
 motorbikes_train = load_dir('../Caltech4/ImageData/motorbikes_train/', n);
 
-trainset = {airplanes_train, cars_train, faces_train, motorbikes_train};
+
+trainset1 = {{airplanes_train{1:floor(n*r)}}, {cars_train{1:floor(n*r)}}, {faces_train{1:floor(n*r)}}, {motorbikes_train{1:floor(n*r)}}};
+trainset2 = {{airplanes_train{1+floor(n*r):n}}, {cars_train{1+floor(n*r):n}}, {faces_train{1+floor(n*r):n}}, {motorbikes_train{1+floor(n*r):n}}};
 testset = {airplanes_test, cars_test, faces_test, motorbikes_test};
 
 end

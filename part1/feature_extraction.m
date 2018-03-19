@@ -1,7 +1,6 @@
 %% Return a cell with variable number of SIFT features for each image (takes RGB)
 function [train_feature_cell] = feature_extraction(train_cell, method)
 run('vlfeat-0.9.21/toolbox/vl_setup')
-disp('Extracting features...');
 
 % Obtain SIFT features for every image in cell and place in new cell
 train_feature_cell = cell(1,length(train_cell));
@@ -37,7 +36,7 @@ for i = 1:length(train_cell)
             d = [dR;dB;dB];
         elseif strcmp(method,'rgbsift')
             % Convert image to normalized RGB
-            rgb_im = im ./ sum(im,3);
+            rgb_im = double(im) ./ sum(im,3);
             
             % Compute keypoint locations using the grayscale image
             f = vl_sift(gs_im);
@@ -50,14 +49,20 @@ for i = 1:length(train_cell)
             % Concatenate the descriptors for each channel
             d = [dr;dg;db];
             
-        elseif strcmp(method,'opponentsift')
+        elseif strcmp(method,'opsift')
             % Convert im to opponent color space
             R  = im(:,:,1);
             G  = im(:,:,2);
             B  = im(:,:,3);
-            dc1 = vl_siftdescriptor(construct_grad((R-G)./sqrt(2)));
-            dc2 = vl_siftdescriptor(construct_grad((R+G-2*B)./sqrt(6)));
-            dc3 = vl_siftdescriptor(construct_grad((R+G+B)./sqrt(3)));
+            
+            % Compute keypoint locations using the grayscale image
+            f = vl_sift(gs_im);
+            
+            % Compute descriptors using f for all channels in the color
+            % space
+            dc1 = vl_siftdescriptor(construct_grad((R-G)./sqrt(2),f),f);
+            dc2 = vl_siftdescriptor(construct_grad((R+G-2*B)./sqrt(6),f),f);
+            dc3 = vl_siftdescriptor(construct_grad((R+G+B)./sqrt(3),f),f);
             
             % Concatenate the descriptors for each channel
             d = [dc1;dc2;dc3];
