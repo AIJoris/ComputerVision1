@@ -1,7 +1,8 @@
 %% TODO
 % Change r into an integer to specify how many images of each set to take
 % Use images for classification that have NOT been used for building vocab
-% dsift, rgbsift,RGBsift
+% dsift with stepsize = 10
+% rgbsift, RGBsift, opponentsift with concatenation of color channels 
 % Classify using SVD
 % Compute metircs (AP etc)
 
