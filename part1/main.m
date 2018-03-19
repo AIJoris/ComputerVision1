@@ -1,3 +1,4 @@
+function main(n,r,k,method)
 %% Specify paramters
 n = 40;             % number of images to load (n<400)
 r = 0.4;            % ratio of train set to use for vocabbuilding/training
