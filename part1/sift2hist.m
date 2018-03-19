@@ -13,7 +13,8 @@ for i = 1:length(train_feature_cell)
         [~,hist] = min(pdist2(im_features',C)');
         
         % Normalize the histogram
-        dataset_hist_cell{j} = hist./size(im_features,2);
+        dataset_hist_cell{j} = hist./size(im_features,2)
     end
+    train_hist_cell{i} = dataset_hist_cell;
 end
 end
