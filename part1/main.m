@@ -7,7 +7,7 @@
 
 %% Specify paramters
 n = 10;             % number of images to load
-method = 'sift';    % feature extraction method
+method = 'dsift';    % feature extraction method
 k = 400;            % number of words in visual vocabulary
 
 %% Load images

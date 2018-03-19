@@ -25,12 +25,42 @@ for i = 1:length(train_cell)
         elseif strcmp(method,'dsift')
             [f, d] = vl_dsift(gs_im,'step',10);
         elseif strcmp(method,'RGBsift')
-            f = v1_sift(gs_im);
+            % Compute keypoint locations using the grayscale image
+            f = vl_sift(gs_im);
             
+            % Compute descriptors using f for R,B and G channels
+            dR = vl_siftdescriptor(construct_grad(im(:,:,1),f),f);
+            dG = vl_siftdescriptor(construct_grad(im(:,:,2),f),f);
+            dB = vl_siftdescriptor(construct_grad(im(:,:,3),f),f);
+            
+            % Concatenate the descriptors for each channel
+            d = [dR;dB;dB];
         elseif strcmp(method,'rgbsift')
-            disp('rgbSIFT');
+            % Convert image to normalized RGB
+            rgb_im = im ./ sum(im,3);
+            
+            % Compute keypoint locations using the grayscale image
+            f = vl_sift(gs_im);
+            
+            % Compute descriptors using f for R,B and G channels
+            dr = vl_siftdescriptor(construct_grad(rgb_im(:,:,1),f),f);
+            dg = vl_siftdescriptor(construct_grad(rgb_im(:,:,2),f),f);
+            db = vl_siftdescriptor(construct_grad(rgb_im(:,:,3),f),f);
+            
+            % Concatenate the descriptors for each channel
+            d = [dr;dg;db];
+            
         elseif strcmp(method,'opponentsift')
-            disp('opponentSIFT');
+            % Convert im to opponent color space
+            R  = im(:,:,1);
+            G  = im(:,:,2);
+            B  = im(:,:,3);
+            dc1 = vl_siftdescriptor(construct_grad((R-G)./sqrt(2)));
+            dc2 = vl_siftdescriptor(construct_grad((R+G-2*B)./sqrt(6)));
+            dc3 = vl_siftdescriptor(construct_grad((R+G+B)./sqrt(3)));
+            
+            % Concatenate the descriptors for each channel
+            d = [dc1;dc2;dc3];
         end
         dataset_features_cell{j} = d;
     end
