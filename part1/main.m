@@ -1,8 +1,8 @@
 %% Specify paramters
-n = 10;             % number of images to load (n<400)
-r = 0.5;            % ratio of train set to use for vocabbuilding/training
+n = 400;             % number of images to load (n<400)
+r = 0.4;            % ratio of train set to use for vocabbuilding/training
 method = 'sift';    % feature extraction method
-k = 400;            % number of words in visual vocabulary
+k = 800;            % number of words in visual vocabulary
 n_pos = n-ceil(n * r);
 n_neg = 3 * n_pos;
 
@@ -31,3 +31,6 @@ models = train_SVM(hist_train);
 
 %% Evaluate results
 [AP, MAP] = MeanAveragePrecision(predictions);
+
+%% Save mat file to process in python and write to the HTML template
+save('vars.mat','qualitative','k','r','n_neg','n_pos','method','AP','MAP');

@@ -14,7 +14,7 @@ for i=1:length(data)
     [~,predictions{i}] = max(decision_values,[],2);
         
     scores = reshape(decision_values,[],1);
-    [~,indices] = sort(scores);
+    [~,indices] = sort(scores,'ascend');
     qual_names{i} = filenames(indices);  
 end
 end

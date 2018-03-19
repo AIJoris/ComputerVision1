@@ -11,5 +11,5 @@ for i = 1:length(sift_cell)
 end
 
 % Use kmeans to cluster the SIFT features, where nclusters is vocab size
-[idx,C] = kmeans(double(feature_bag),k);
+[idx,C] = kmeans(double(feature_bag),k,'MaxIter',300);
 end
