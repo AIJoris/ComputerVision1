@@ -6,7 +6,7 @@ train_hist_cell = cell(size(train_feature_cell));
 for i = 1:length(train_feature_cell)
     dataset_feature_cell = train_feature_cell{i};
     dataset_hist_cell = cell(size(dataset_feature_cell));
-    for j = 1:round(length(dataset_feature_cell)/2)
+    for j = 1:length(dataset_feature_cell)
         im_features = double(dataset_feature_cell{j});
         % Compute the distances between the vocabulary words and the
         % visual words in the image
