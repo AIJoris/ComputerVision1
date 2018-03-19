@@ -1,6 +1,6 @@
 %% Specify paramters
 n = 10;             % number of images to load (n<400)
-r = 0.5;            % ratio of train set to use for vocabbuilding/training 
+r = 0.5;            % ratio of train set to use for vocabbuilding/training
 method = 'sift';    % feature extraction method
 k = 400;            % number of words in visual vocabulary
 n_pos = n-ceil(n * r);
@@ -23,17 +23,11 @@ disp('Constructing histograms...');
 hist_train = sift2hist(sift_train, C);
 hist_test = sift2hist(sift_test, C);
 
-%% Train SVM on second half of train set to classify images
-% model = train(training_label_vector, training_instance_matrix [,'liblinear_options', 'col']);
-% [predicted_label, accuracy, decision_values/prob_estimates] = predict(testing_label_vector, testing_instance_matrix, model [, 'liblinear_options', 'col']);
+%% Train Support Vector Machine using the histograms
+models = train_SVM(hist_train);
 
-%% Write parameters to handle HTML parsing in Python
-%AP
-%MAP
-%names
+%% Make predictions
+[predictions, qualitative] = predict_SVM(models, hist_test, test_names);
 
-
-
-
-
-
+%% Evaluate results
+[AP, MAP] = MeanAveragePrecision(predictions);
