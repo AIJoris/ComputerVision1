@@ -5,7 +5,7 @@ train_hist_cell = cell(size(train_feature_cell));
 % For each image, for each feature, find closest 'word' in vocab
 for i = 1:length(train_feature_cell)
     dataset_feature_cell = train_feature_cell{i};
-    dataset_hist_cell = cell(size(dataset_feature_cell));
+    features = zeros(length(dataset_feature_cell),length(C));
     for j = 1:length(dataset_feature_cell)
         im_features = double(dataset_feature_cell{j});
         % Compute the distances between the vocabulary words and the
@@ -13,8 +13,8 @@ for i = 1:length(train_feature_cell)
         [~,hist] = min(pdist2(im_features',C));
         
         % Normalize the histogram
-        dataset_hist_cell{j} = hist./size(im_features,2);
+        features(j,:) = hist./size(im_features,2);
     end
-    train_hist_cell{i} = dataset_hist_cell;
+    train_hist_cell{i} = features;
 end
 end
