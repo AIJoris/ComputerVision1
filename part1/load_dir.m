@@ -1,11 +1,20 @@
 %% Loads all images in a given path into a cell.
-function [images] = load_dir(path, p)
+function [images] = load_dir(path, n)
 files = dir([path '*.jpg']);
 
-n = round(p*length(files));
+if n <= length(files)
+    images = cell(1,n);
+    rand_indices = randperm(length(files), n);
+else
+    images = cell(1,length(files));
+    rand_indices = randperm(length(files), length(files));
 
-images = cell(1,n);
-rand_indices = randperm(length(files), n);
+end
+
+
+
+
+
 
 for i=1:length(rand_indices)
     images{i} = imread(strcat(path,files(rand_indices(i)).name));

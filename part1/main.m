@@ -1,5 +1,4 @@
 %% TODO
-% Change r into an integer to specify how many images of each set to take
 % Use images for classification that have NOT been used for building vocab
 % dsift with stepsize = 10
 % rgbsift, RGBsift, opponentsift with concatenation of color channels 
@@ -7,12 +6,12 @@
 % Compute metircs (AP etc)
 
 %% Specify paramters
-r = 0.01;           % ratio of images to load
+n = 10;             % number of images to load
 method = 'sift';    % feature extraction method
 k = 400;            % number of words in visual vocabulary
 
 %% Load images
-[train_cell, test_cell] = load_data(r);
+[train_cell, test_cell] = load_data(n);
 
 %% Extract SIFT features from images
 train_feature_cell = feature_extraction(train_cell, method);
