@@ -6,9 +6,9 @@
 % Compute metircs (AP etc)
 
 %% Specify paramters
-n = 10;             % number of images to load
-method = 'dsift';    % feature extraction method
-k = 400;            % number of words in visual vocabulary
+n = 5;              % number of images to load
+method = 'sift';    % feature extraction method
+k = 10;             % number of words in visual vocabulary
 
 %% Load images
 [train_cell, test_cell] = load_data(n);
@@ -24,6 +24,11 @@ C = build_vocab(train_feature_cell,k);
 % related class (but the ones which you did not use for dictionary calculation)"
 train_hist_cell = sift2hist(train_feature_cell,C);
 
-%% Use SVM to classify images
-% model = train(training_label_vector, training_instance_matrix [,'liblinear_options', 'col']);
-% [predicted_label, accuracy, decision_values/prob_estimates] = predict(testing_label_vector, testing_instance_matrix, model [, 'liblinear_options', 'col']);
+%% Train Support Vector Machine using the histograms
+models = train_SVM(train_hist_cell);
+
+%% Make predictions
+[predictions, qualitative] = predict_SVM(models, train_hist_cell, train_cell);
+
+%% Evaluate results
+[AP, MAP] = MeanAveragePrecision(predictions);
