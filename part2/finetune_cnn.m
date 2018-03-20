@@ -26,7 +26,6 @@ if ~isfield(opts.train, 'gpus'), opts.train.gpus = []; end;
 
 
 %% update model
-
 net = update_model();
 
 %% TODO: Implement getCaltechIMDB function below
@@ -40,6 +39,10 @@ else
 end
 
 %%
+
+
+
+
 net.meta.classes.name = imdb.meta.classes(:)' ;
 
 % -------------------------------------------------------------------------
@@ -71,6 +74,7 @@ end
 function [images, labels] = getSimpleNNBatch(imdb, batch)
 % -------------------------------------------------------------------------
 images = imdb.images.data(:,:,:,batch) ;
+
 labels = imdb.images.labels(1,batch) ;
 if rand > 0.5, images=fliplr(images) ; end
 
@@ -93,8 +97,8 @@ for i=1:length(type)
 end
 
 data = zeros(32, 32, 3, n, 'single');
-labels = zeros(n, 1) ;
-sets = zeros(n, 1);
+labels = zeros(1, n) ;
+sets = zeros(1, n);
 
 
 im_index = 1;
@@ -130,7 +134,7 @@ for i=1:length(type)
     end
 
     directory = dir(strcat(folder,type{i},'/*.jpg'));
-    % per directory loop through images
+    % per direc tory loop through images
     for fn=1:length(directory)
        im = imread(strcat(folder, type{i}, directory(fn).name));
        im = imresize(im, [32 32]);
@@ -142,16 +146,17 @@ for i=1:length(type)
     end
 end
 
-
 % subtract mean
 dataMean = mean(data(:, :, :, sets == 1), 4);
 data = bsxfun(@minus, data, dataMean);
+
 
 imdb.images.data = data;
 imdb.images.labels = single(labels);
 imdb.images.set = sets;
 imdb.meta.sets = {'train', 'val'};
 imdb.meta.classes = classes;
+
 
 %% Randomize
 perm = randperm(numel(imdb.images.labels));
