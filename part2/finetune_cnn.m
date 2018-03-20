@@ -4,6 +4,8 @@ function [net, info, expdir] = finetune_cnn(varargin)
 %run(fullfile(fileparts(mfilename('fullpath')), ...
 %  '..', '..', '..', 'matlab', 'vl_setupnn.m')) ;
 
+run MatConvNet/matlab/vl_setupnn
+
 opts.modelType = 'lenet' ;
 [opts, varargin] = vl_argparse(opts, varargin) ;
 
@@ -20,7 +22,7 @@ opts.train = struct() ;
 opts = vl_argparse(opts, varargin) ;
 if ~isfield(opts.train, 'gpus'), opts.train.gpus = []; end;
 
-opts.train.gpus = [1];
+%opts.train.gpus = [1];
 
 
 %% update model
@@ -76,7 +78,7 @@ end
 
 function imdb = getCaltechIMDB()
 % -------------------------------------------------------------------------
-% Prepare the imdb structure, returns image data with mean image subtracted
+% Preapre the imdb structure, returns image data with mean image subtracted
 classes = {'airplanes', 'cars', 'faces', 'motorbikes'};
 splits = {'train', 'test'};
 
@@ -94,6 +96,8 @@ data = zeros(32, 32, 3, n, 'single');
 labels = zeros(n, 1) ;
 sets = zeros(n, 1);
 
+
+im_index = 1;
 % loop through directories
 for i=1:length(type)
     % determine if data is train or test
@@ -130,9 +134,11 @@ for i=1:length(type)
     for fn=1:length(directory)
        im = imread(strcat(folder, type{i}, directory(fn).name));
        im = imresize(im, [32 32]);
-       data(:,:,:,i) = single(im);
-       sets(i) = train;  
-       labels(i) = class;
+       data(:,:,:,im_index) = single(im);
+       sets(im_index) = train;  
+       labels(im_index) = class;
+       
+       im_index = im_index+1;
     end
 end
 
