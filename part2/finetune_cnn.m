@@ -1,10 +1,8 @@
 function [net, info, expdir] = finetune_cnn(varargin)
 
 %% Define options
-%run(fullfile(fileparts(mfilename('fullpath')), ...
-%  '..', '..', '..', 'matlab', 'vl_setupnn.m')) ;
-
-run MatConvNet/matlab/vl_setupnn
+% run(fullfile(fileparts(mfilename('fullpath')), ...
+%   '..', '..', '..', 'matlab', 'vl_setupnn.m')) ;
 
 opts.modelType = 'lenet' ;
 [opts, varargin] = vl_argparse(opts, varargin) ;
@@ -22,10 +20,12 @@ opts.train = struct() ;
 opts = vl_argparse(opts, varargin) ;
 if ~isfield(opts.train, 'gpus'), opts.train.gpus = []; end;
 
-%opts.train.gpus = [1];
+% opts.train.gpus = [];
+
 
 
 %% update model
+
 net = update_model();
 
 %% TODO: Implement getCaltechIMDB function below
@@ -39,10 +39,6 @@ else
 end
 
 %%
-
-
-
-
 net.meta.classes.name = imdb.meta.classes(:)' ;
 
 % -------------------------------------------------------------------------
@@ -74,18 +70,19 @@ end
 function [images, labels] = getSimpleNNBatch(imdb, batch)
 % -------------------------------------------------------------------------
 images = imdb.images.data(:,:,:,batch) ;
-
 labels = imdb.images.labels(1,batch) ;
 if rand > 0.5, images=fliplr(images) ; end
 
 end
 
+% -------------------------------------------------------------------------
 function imdb = getCaltechIMDB()
 % -------------------------------------------------------------------------
 % Preapre the imdb structure, returns image data with mean image subtracted
 classes = {'airplanes', 'cars', 'faces', 'motorbikes'};
 splits = {'train', 'test'};
 
+%% Implement your loop here, to create the data structure described in the assignment
 folder = 'data/Caltech4/ImageData';
 type = {'/airplanes_train/','/cars_train/', '/faces_train/', '/motorbikes_train/', ...
     '/faces_test/', '/airplanes_test/', '/cars_test/', '/motorbikes_test/'}; 
@@ -97,8 +94,8 @@ for i=1:length(type)
 end
 
 data = zeros(32, 32, 3, n, 'single');
-labels = zeros(1, n) ;
-sets = zeros(1, n);
+labels = zeros(1, n, 'single') ;
+sets = zeros(1, n,'single');
 
 
 im_index = 1;
@@ -121,16 +118,16 @@ for i=1:length(type)
             train = 1;
         case 5
             class = 1;
-            train = 0;
+            train = 2;
         case 6
             class = 2;
-            train = 0;
+            train = 2;
         case 7
             class = 3;
-            train = 0;
+            train = 2;
         case 8
             class = 4;
-            train = 0;  
+            train = 2;  
     end
 
     directory = dir(strcat(folder,type{i},'/*.jpg'));
@@ -139,28 +136,26 @@ for i=1:length(type)
        im = imread(strcat(folder, type{i}, directory(fn).name));
        im = imresize(im, [32 32]);
        data(:,:,:,im_index) = single(im);
-       sets(im_index) = train;  
-       labels(im_index) = class;
-       
+       sets(im_index) = single(train);  
+       labels(im_index) = single(class);
        im_index = im_index+1;
     end
 end
 
+%%
 % subtract mean
 dataMean = mean(data(:, :, :, sets == 1), 4);
 data = bsxfun(@minus, data, dataMean);
 
-
-imdb.images.data = data;
-imdb.images.labels = single(labels);
+imdb.images.data = data ;
+imdb.images.labels = single(labels) ;
 imdb.images.set = sets;
-imdb.meta.sets = {'train', 'val'};
+imdb.meta.sets = {'train', 'val'} ;
 imdb.meta.classes = classes;
 
-
-%% Randomize
 perm = randperm(numel(imdb.images.labels));
 imdb.images.data = imdb.images.data(:,:,:, perm);
 imdb.images.labels = imdb.images.labels(perm);
 imdb.images.set = imdb.images.set(perm);
+
 end
