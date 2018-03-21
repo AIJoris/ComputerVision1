@@ -50,12 +50,12 @@ for i in range(0,13):
                     line = line.replace('Airplanes (AP: 0.XXX)</th><th>Cars (AP: 0.XXX)</th><th>Faces (AP: 0.XXX)</th><th>Motorbikes (AP: 0.XXX)', \
                     'Airplanes (AP: {})</th><th>Cars (AP: {})</th><th>Faces (AP: {})</th><th>Motorbikes (AP: {})'.format(ap[0],ap[1],ap[2],ap[3]))
                 elif '<tr><td><img src=\"Caltech4/ImageData/airplanes_test/img003.jpg\" /></td><td><img src=\"Caltech4/ImageData/cars_test/img024.jpg\" /></td><td><img src=\"Caltech4/ImageData/faces_test/img015.jpg\" /></td><td><img src=\"Caltech4/ImageData/motorbikes_test/img001.jpg\" /></td></tr>' in line:
-                    for i in range(0,199):
+                    for i in reversed(range(0,199)):
                         line = '<tr><td><img src=\"{}\" /></td><td><img src=\"{}\" /></td><td><img src=\"{}\" /></td><td><img src=\"{}\" /></td></tr>'.format(matfile['qualitative'][0][0][i][0][0],matfile['qualitative'][0][1][i][0][0],matfile['qualitative'][0][2][i][0][0],matfile['qualitative'][0][3][i][0][0])
                         f1.write(line)
                     f1.write('</tbody>')
                     f1.write('</table>')
                     f1.write('</body>')
                     f1.write('</html>')
-
+                    quit()
                 f1.write(line)
