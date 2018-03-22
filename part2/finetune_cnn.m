@@ -4,6 +4,8 @@ function [net, info, expdir] = finetune_cnn(varargin)
 % run(fullfile(fileparts(mfilename('fullpath')), ...
 %   '..', '..', '..', 'matlab', 'vl_setupnn.m')) ;
 
+run('MatConvNet/matlab/vl_setupnn.m')
+
 opts.modelType = 'lenet' ;
 [opts, varargin] = vl_argparse(opts, varargin) ;
 
@@ -85,7 +87,7 @@ splits = {'train', 'test'};
 %% Implement your loop here, to create the data structure described in the assignment
 folder = 'data/Caltech4/ImageData';
 type = {'/airplanes_train/','/cars_train/', '/faces_train/', '/motorbikes_train/', ...
-    '/faces_test/', '/airplanes_test/', '/cars_test/', '/motorbikes_test/'}; 
+        '/airplanes_test/', '/cars_test/', '/faces_test/', '/motorbikes_test/'}; 
 
 %% Determine length of matrix (use all images)
 n = 0;
