@@ -1,6 +1,6 @@
 from scipy.io import loadmat
 
-for i in range(0,13):
+for i in range(12,13):
     matfile = loadmat('result_{}.mat'.format(i))
 
     # Obtain parameters from .mat file

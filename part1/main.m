@@ -24,6 +24,9 @@ disp('Constructing histograms...');
 hist_train = sift2hist(sift_train, C);
 hist_test = sift2hist(sift_test, C);
 
+%% Visualize the features using tsne
+visualize_features_bow(hist_train, hist_test);
+
 %% Train Support Vector Machine using the histograms
 models = train_SVM(hist_train);
 
